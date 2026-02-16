@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -23,7 +25,9 @@ class OrderController extends Controller
      */
     public function create()
     {
-        //
+        $products = Product::all();
+        $clients = Client::all();
+        return view('order.create', compact('products', 'clients'));
     }
 
     /**
@@ -31,7 +35,17 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Log::channel('stderr')->info('STORE ORDER', [$request->all()]);
+        //validación
+        $request->validate([
+            "product_id" => "required|exists:products,id",
+            "client_id" => "required|exists:clients,id"
+        ]);
+
+        //inserción
+        Order::create($request->all());
+        return redirect()->route('index')->with('success', 'Order created');
+
     }
 
     /**

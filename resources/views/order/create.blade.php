@@ -13,35 +13,36 @@
 <body>
     @include('components.header')
 
-    <h2>Create an order</h2>
     <div class="container">
         <div class="row">
             <div class="col">
                 <form action="{{ route('order.store') }}" method="post">
                     @csrf
                     <div class="form-group">
-                        <label for="name">Name *</label>
-                        <input name="name" type="text" id="name" placeholder="Enter name"
-                            class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}">
-                        @error('name') <small class="text-danger">{{ $message }}</small>
+                        <select class="form-select" aria-label="Default select example" name="product_id">
+                            <option selected>Product</option>
+                            @foreach ($products as $p)
+                                <option value="{{ $p->id }}">{{ $p->name }} - Precio: {{ $p->price }}</option>
+                            @endforeach
+
+                        </select>
+                        @error('product_id')
+                            <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="surname">Surname *</label>
-                        <input name="surname" type="text" class="form-control @error('surname') is-invalid @enderror" id="surname" placeholder="Enter surname"
-                            value="{{ old('surname') }}">
-                            @error('surname') <small class="text-danger">{{ $message }}</small>
+                        <select class="form-select" aria-label="Default select example" name="client_id">
+                            <option selected>Client</option>
+                            @foreach ($clients as $c)
+                                <option value="{{ $c->id }}">{{ $c->name }} {{ $c->surname }}</option>
+                            @endforeach
+
+                        </select>
+                        @error('client_id')
+                            <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
-                    <div class="form-group">
-                        <label for="address">Address</label>
-                        <input name="address" type="text" class="form-control @error('address') is-invalid @enderror"
-                            id="address" placeholder="Enter address" value="{{ old('address') }}">
-                        @error('address') <small class="text-danger"> {{ $message }}</small>
-                        @enderror
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Create order</button>
                 </form>
             </div>
 
